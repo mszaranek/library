@@ -1,10 +1,10 @@
 package pl.autorun.library.model;
 
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.engine.spi.CascadingAction;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,6 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
 public class Author {
 
     @Id
@@ -22,11 +23,15 @@ public class Author {
     private String firstName;
     private String lastName;
 
-    @ManyToMany(mappedBy = "authors")
-    private Set<Book> books  = new HashSet<>();
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
+    @JsonBackReference(value="author-books")
+    private Set<Book> books = new HashSet<>();
 
-    public Author(String firstName, String lastName){
-        this.firstName=firstName;
-        this.lastName=lastName;
+    public Author() {
+    }
+
+    public Author(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 }

@@ -1,7 +1,7 @@
 package pl.autorun.library.model;
 
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
 public class Genre {
 
     @Id
@@ -23,9 +24,12 @@ public class Genre {
     @ManyToMany
     @JoinTable(name = "genre_book", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
-    private Set<Book> books  = new HashSet<>();
+    private Set<Book> books = new HashSet<>();
 
-    public Genre(String name){
+    public Genre() {
+    }
+
+    public Genre(String name) {
         this.name = name;
     }
 }

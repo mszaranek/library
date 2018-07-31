@@ -1,6 +1,7 @@
 package pl.autorun.library.model;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -19,8 +21,10 @@ public class User {
 
     private String username;
 
-    @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "user")
     private Set<Book> books = new HashSet<>();
+
+    public User(){}
 
     public User(String username){
         this.username=username;
