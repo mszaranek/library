@@ -1,7 +1,6 @@
 package pl.autorun.library.bootstrap;
 
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -26,7 +25,7 @@ public class LibraryBootstrap implements ApplicationListener<ContextRefreshedEve
 
     public LibraryBootstrap(AuthorRepository authorRepository,
                             BookRepository bookRepository, GenreRepository genreRepository,
-                            UserRepository userRepository){
+                            UserRepository userRepository) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
         this.genreRepository = genreRepository;
@@ -39,7 +38,7 @@ public class LibraryBootstrap implements ApplicationListener<ContextRefreshedEve
         initData();
     }
 
-    private void initData(){
+    private void initData() {
 
         User user1 = new User("user1");
         User user2 = new User("user2");
@@ -47,8 +46,7 @@ public class LibraryBootstrap implements ApplicationListener<ContextRefreshedEve
         Author johnSmith = new Author("John", "Smith");
         Author joeDoe = new Author("Joe", "Doe");
         Author bobRoss = new Author("Bob", "Ross");
-        Author jimBeam = new Author ("Jim", "Beam");
-
+        Author jimBeam = new Author("Jim", "Beam");
 
 
         Book book1 = new Book("book1", "1");
@@ -56,8 +54,8 @@ public class LibraryBootstrap implements ApplicationListener<ContextRefreshedEve
         Book book3 = new Book("book3", "3");
 
         Genre fantasy = new Genre("fantasy");
-        Genre drama = new Genre ("drama");
-        Genre romance = new Genre ("romance");
+        Genre drama = new Genre("drama");
+        Genre romance = new Genre("romance");
 
 
         johnSmith.getBooks().add(book1);
@@ -102,7 +100,6 @@ public class LibraryBootstrap implements ApplicationListener<ContextRefreshedEve
         user2.getBooks().add(book3);
 
 
-
         userRepository.save(user1);
         userRepository.save(user2);
 
@@ -111,17 +108,13 @@ public class LibraryBootstrap implements ApplicationListener<ContextRefreshedEve
         authorRepository.save(bobRoss);
         authorRepository.save(jimBeam);
 
-
+        genreRepository.save(fantasy);
+        genreRepository.save(drama);
+        genreRepository.save(romance);
 
         bookRepository.save(book1);
         bookRepository.save(book2);
         bookRepository.save(book3);
-
-
-
-        genreRepository.save(fantasy);
-        genreRepository.save(drama);
-        genreRepository.save(romance);
 
 
     }

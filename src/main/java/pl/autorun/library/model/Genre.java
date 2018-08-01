@@ -1,6 +1,7 @@
 package pl.autorun.library.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,9 +22,8 @@ public class Genre {
 
     private String name;
 
-    @ManyToMany
-    @JoinTable(name = "genre_book", joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    @ManyToMany(mappedBy = "genres")
+    @JsonBackReference(value = "genres-books")
     private Set<Book> books = new HashSet<>();
 
     public Genre() {

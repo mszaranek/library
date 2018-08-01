@@ -28,8 +28,10 @@ public class Book {
     private Set<Author> authors = new HashSet<>();
 
 
-    @ManyToMany(mappedBy = "books")
-    @JsonBackReference(value="genres-books")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinTable(name = "genre_book", joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+
     private Set<Genre> genres = new HashSet<>();
 
     public Book() {
@@ -41,6 +43,6 @@ public class Book {
     }
 
     @ManyToOne
-    @JsonBackReference(value="user-books")
+    @JsonBackReference(value = "user-books")
     private User user;
 }

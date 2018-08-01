@@ -23,8 +23,8 @@ public class Author {
     private String firstName;
     private String lastName;
 
-    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
-    @JsonBackReference(value="author-books")
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JsonBackReference(value = "author-books")
     private Set<Book> books = new HashSet<>();
 
     public Author() {

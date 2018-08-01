@@ -21,12 +21,13 @@ public class User {
 
     private String username;
 
-    @OneToMany(cascade = CascadeType.MERGE, mappedBy = "user")
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH, CascadeType.REFRESH}, mappedBy = "user")
     private Set<Book> books = new HashSet<>();
 
-    public User(){}
+    public User() {
+    }
 
-    public User(String username){
-        this.username=username;
+    public User(String username) {
+        this.username = username;
     }
 }
