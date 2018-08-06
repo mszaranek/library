@@ -4,57 +4,51 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.autorun.library.model.Book;
+import pl.autorun.library.converter.Converter;
+import pl.autorun.library.model.DTO.BookDTO;
 import pl.autorun.library.services.BookService;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping(value = "/books")
 public class BookController {
 
     private final BookService bookService;
+    private final Converter converter;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, Converter converter) {
         this.bookService = bookService;
+        this.converter = converter;
     }
 
-    @GetMapping(value = "/book/show")
-    public ResponseEntity<Set<Book>> showBooks() {
-
-        return new ResponseEntity<>(bookService.getBooks(), HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<Set<BookDTO>> showBooks() {
+        return new ResponseEntity<>(bookService.getBooks().stream()
+                .map(book -> converter.convertBookToDto(book))
+                .collect(Collectors.toSet()), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/book/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Book> createBook(@RequestBody Book book) {
-
-        bookService.createBook(book);
-
-        return new ResponseEntity<>(book, HttpStatus.CREATED);
-
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createBook(@RequestBody BookDTO bookDTO) {
+        bookService.createBook(converter.convertDtoToBook(bookDTO));
     }
 
-    @PostMapping(value = "/book/find", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Book> findBook(@RequestBody Book book) {
-
-
-        if (bookService.findBookById(book.getId()) != null)
-            return new ResponseEntity<>(bookService.findBookById(book.getId()), HttpStatus.OK);
-
-        else
-            return null;
-
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<BookDTO> findBook(@PathVariable(value = "id") Long id) {
+        return new ResponseEntity<>(converter.convertBookToDto(bookService.findBookById(id)), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/book/update", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Book> updateBook(@RequestBody Book book) {
-        bookService.findBookById(book.getId());
-        return new ResponseEntity<>(bookService.updateBook(book), HttpStatus.OK);
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void updateBook(@RequestBody BookDTO bookDTO) {
+        bookService.findBookById(bookDTO.getId());
+        bookService.updateBook(converter.convertDtoToBook(bookDTO));
     }
 
-    @DeleteMapping(value = "/book/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> deleteBook(@RequestBody Book book) {
-        bookService.findBookById(book.getId());
-        return new ResponseEntity<>(bookService.deleteBook(book), HttpStatus.OK);
-
+    @DeleteMapping(value = "/{id}")
+    public void deleteBook(@PathVariable(value = "id") Long id) {
+        bookService.deleteBook(bookService.findBookById(id));
     }
 }

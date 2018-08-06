@@ -1,13 +1,11 @@
 package pl.autorun.library.services;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.autorun.library.exceptions.NotFoundException;
 import pl.autorun.library.model.Book;
-import pl.autorun.library.repositories.AuthorRepository;
+import pl.autorun.library.model.DTO.BookDTO;
 import pl.autorun.library.repositories.BookRepository;
-import pl.autorun.library.repositories.GenreRepository;
-import pl.autorun.library.repositories.UserRepository;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -17,57 +15,34 @@ import java.util.Set;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
-    private final GenreRepository genreRepository;
-    private final AuthorRepository authorRepository;
-    private final UserRepository userRepository;
 
-    public BookServiceImpl(BookRepository bookRepository, GenreRepository genreRepository,
-                           AuthorRepository authorRepository, UserRepository userRepository) {
+    @Autowired
+    public BookServiceImpl(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
-        this.genreRepository = genreRepository;
-        this.authorRepository = authorRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
     public Set<Book> getBooks() {
-        Set<Book> bookSet = new HashSet<>();
-
-        bookRepository.findAll().iterator().forEachRemaining(bookSet::add);
-        return bookSet;
+        return new HashSet<>(bookRepository.findAll());
     }
 
     @Override
     public void createBook(Book book) {
         bookRepository.save(book);
-
     }
 
     @Override
     public Book findBookById(Long l) {
-
-        Optional<Book> bookOptional = bookRepository.findById(l);
-
-        if (!bookOptional.isPresent()) {
-            throw new NotFoundException("Book not found");
-        } else
-
-            return bookOptional.get();
+        return Optional.ofNullable(bookRepository.findById(l)).get().get();
     }
 
     @Override
-    public Book updateBook(Book book) {
-
+    public void updateBook(Book book) {
         bookRepository.save(book);
-        return book;
     }
 
     @Override
-    public String deleteBook(Book book) {
-
-
+    public void deleteBook(Book book) {
         bookRepository.delete(book);
-
-        return "Book has been deleted";
     }
 }
