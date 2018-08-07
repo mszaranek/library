@@ -3,12 +3,11 @@ package pl.autorun.library.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.autorun.library.exceptions.NotFoundException;
 import pl.autorun.library.model.Book;
-import pl.autorun.library.model.DTO.BookDTO;
 import pl.autorun.library.repositories.BookRepository;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -33,7 +32,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book findBookById(Long l) {
-        return Optional.ofNullable(bookRepository.findById(l)).get().get();
+        return bookRepository.findById(l).orElseThrow((() -> new NotFoundException("Book not found")));
     }
 
     @Override

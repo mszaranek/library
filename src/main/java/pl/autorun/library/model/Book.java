@@ -3,6 +3,7 @@ package pl.autorun.library.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.Set;
 @Setter
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 public class Book {
 
     @Id
@@ -33,9 +35,6 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
 
     private Set<Genre> genres = new HashSet<>();
-
-    public Book() {
-    }
 
     public Book(String title, String isbn) {
         this.title = title;

@@ -3,6 +3,7 @@ package pl.autorun.library.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.Set;
 @Setter
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -23,9 +25,6 @@ public class User {
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH, CascadeType.REFRESH}, mappedBy = "user")
     private Set<Book> books = new HashSet<>();
-
-    public User() {
-    }
 
     public User(String username) {
         this.username = username;

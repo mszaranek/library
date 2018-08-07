@@ -4,6 +4,7 @@ package pl.autorun.library.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.Set;
 @Setter
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 public class Genre {
 
     @Id
@@ -26,8 +28,6 @@ public class Genre {
     @JsonBackReference(value = "genres-books")
     private Set<Book> books = new HashSet<>();
 
-    public Genre() {
-    }
 
     public Genre(String name) {
         this.name = name;

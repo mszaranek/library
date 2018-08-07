@@ -4,6 +4,7 @@ package pl.autorun.library.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.Set;
 @Setter
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 public class Author {
 
     @Id
@@ -26,9 +28,6 @@ public class Author {
     @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonBackReference(value = "author-books")
     private Set<Book> books = new HashSet<>();
-
-    public Author() {
-    }
 
     public Author(String firstName, String lastName) {
         this.firstName = firstName;

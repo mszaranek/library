@@ -10,6 +10,7 @@ import pl.autorun.library.model.DTO.UserDTO;
 import pl.autorun.library.model.Genre;
 import pl.autorun.library.model.User;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,16 +24,12 @@ public class Converter {
         bookDTO.setId(book.getId());
         bookDTO.setIsbn(book.getIsbn());
         bookDTO.setTitle(book.getTitle());
-        if (book.getAuthors() != null && book.getAuthors().size() > 0) {
-            bookDTO.setAuthors(book.getAuthors().stream()
-                    .map(author -> convertAuthorToDto(author))
-                    .collect(Collectors.toSet()));
-        }
-        if (book.getGenres() != null && book.getGenres().size() > 0) {
-            bookDTO.setGenres(book.getGenres().stream()
-                    .map(genre -> convertGenreToDto(genre))
-                    .collect(Collectors.toSet()));
-        }
+        bookDTO.setAuthors(Optional.ofNullable(book.getAuthors()).get().stream()
+                .map(author -> convertAuthorToDto(author))
+                .collect(Collectors.toSet()));
+        bookDTO.setGenres(Optional.ofNullable(book.getGenres()).get().stream()
+                .map(genre -> convertGenreToDto(genre))
+                .collect(Collectors.toSet()));
         return bookDTO;
     }
 
@@ -45,17 +42,12 @@ public class Converter {
         book.setId(bookDTO.getId());
         book.setIsbn(bookDTO.getIsbn());
         book.setTitle(bookDTO.getTitle());
-        if (bookDTO.getAuthors() != null && bookDTO.getAuthors().size() > 0) {
-            book.setAuthors(bookDTO.getAuthors().stream()
-                    .map(authorDTO -> convertDtoToAuthor(authorDTO))
-                    .collect(Collectors.toSet()));
-        }
-        if (bookDTO.getGenres() != null && bookDTO.getGenres().size() > 0) {
-
-            book.setGenres(bookDTO.getGenres().stream()
-                    .map(genreDTO -> convertDtoToGenre(genreDTO))
-                    .collect(Collectors.toSet()));
-        }
+        book.setAuthors(Optional.ofNullable(bookDTO.getAuthors()).get().stream()
+                .map(authorDTO -> convertDtoToAuthor(authorDTO))
+                .collect(Collectors.toSet()));
+        book.setGenres(Optional.ofNullable(bookDTO.getGenres()).get().stream()
+                .map(genreDTO -> convertDtoToGenre(genreDTO))
+                .collect(Collectors.toSet()));
         return book;
     }
 
@@ -77,14 +69,12 @@ public class Converter {
             return null;
         }
         Author author = new Author();
-        author.setId(author.getId());
+        author.setId(authorDTO.getId());
         author.setFirstName(authorDTO.getFirstName());
         author.setLastName(authorDTO.getLastName());
-        if (authorDTO.getBooks() != null && authorDTO.getBooks().size() > 0) {
-            author.setBooks(authorDTO.getBooks().stream()
-                    .map(bookDTO -> convertDtoToBook(bookDTO))
-                    .collect(Collectors.toSet()));
-        }
+        author.setBooks(Optional.ofNullable(authorDTO.getBooks()).get().stream()
+                .map(bookDTO -> convertDtoToBook(bookDTO))
+                .collect(Collectors.toSet()));
         return author;
     }
 
@@ -106,11 +96,9 @@ public class Converter {
         Genre genre = new Genre();
         genre.setId(genreDTO.getId());
         genre.setName(genreDTO.getName());
-        if (genreDTO.getBooks() != null && genreDTO.getBooks().size() > 0) {
-            genre.setBooks(genreDTO.getBooks().stream()
-                    .map(bookDTO -> convertDtoToBook(bookDTO))
-                    .collect(Collectors.toSet()));
-        }
+        genre.setBooks(Optional.ofNullable(genreDTO.getBooks()).get().stream()
+                .map(bookDTO -> convertDtoToBook(bookDTO))
+                .collect(Collectors.toSet()));
         return genre;
     }
 
@@ -121,11 +109,9 @@ public class Converter {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
         userDTO.setUsername(user.getUsername());
-        if (user.getBooks() != null && user.getBooks().size() > 0) {
-            userDTO.setBooks(user.getBooks().stream()
-                    .map(book -> convertBookToDto(book))
-                    .collect(Collectors.toSet()));
-        }
+        userDTO.setBooks(Optional.ofNullable(user.getBooks()).get().stream()
+                .map(book -> convertBookToDto(book))
+                .collect(Collectors.toSet()));
         return userDTO;
     }
 
@@ -136,11 +122,9 @@ public class Converter {
         User user = new User();
         user.setId(userDTO.getId());
         user.setUsername(userDTO.getUsername());
-        if (userDTO.getBooks() != null && userDTO.getBooks().size() > 0) {
-            user.setBooks(userDTO.getBooks().stream()
-                    .map(bookDTO -> convertDtoToBook(bookDTO))
-                    .collect(Collectors.toSet()));
-        }
+        user.setBooks(Optional.ofNullable(userDTO.getBooks()).get().stream()
+                .map(bookDTO -> convertDtoToBook(bookDTO))
+                .collect(Collectors.toSet()));
         return user;
     }
 
